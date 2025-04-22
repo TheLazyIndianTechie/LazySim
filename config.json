@@ -1,0 +1,96 @@
+{
+    "simulation": {
+      "duration_days": 90,
+      "random_seed": 42,
+      "print_logs": false,
+      "plot_results": true
+    },
+    "economy": {
+      "resources": [
+        {"id": "coins", "initial_balance": 100},
+        {"id": "gems", "initial_balance": 10},
+        {"id": "energy", "initial_balance": 50, "cap": 100, "regen_rate_per_day": 24}
+      ],
+      "actions": [
+        {
+          "id": "daily_login",
+          "type": "source",
+          "frequency_type": "daily",
+          "outputs": [
+            {"resource_id": "coins", "amount": 50},
+            {"resource_id": "energy", "amount": 10}
+          ]
+        },
+        {
+          "id": "play_level",
+          "type": "converter",
+          "costs": [
+            {"resource_id": "energy", "amount": 10}
+          ],
+          "outputs": [
+            {"resource_id": "coins", "amount_min": 5, "amount_max": 20}
+          ]
+        },
+         {
+          "id": "buy_common_item",
+          "type": "sink",
+          "costs": [
+            {"resource_id": "coins", "amount": 150}
+          ]
+        },
+        {
+          "id": "buy_premium_item",
+          "type": "sink",
+          "costs": [
+            {"resource_id": "gems", "amount": 20}
+          ]
+        },
+        {
+          "id": "buy_gems_iap",
+          "type": "iap",
+          "iap_tier_id": "gems_small",
+          "outputs": [
+             {"resource_id": "gems", "amount": 50}
+          ]
+        },
+        {
+          "id": "watch_rewarded_ad",
+          "type": "source",
+          "outputs": [
+              {"resource_id": "gems", "amount": 1}
+          ]
+        }
+      ],
+      "iap_tiers": {
+          "gems_small": {"name": "Small Gem Pack", "cost_usd": 0.99, "resource_id": "gems", "amount": 50},
+          "gems_medium": {"name": "Medium Gem Pack", "cost_usd": 4.99, "resource_id": "gems", "amount": 300}
+      }
+    },
+    "personas": {
+      "non_spender": {
+        "name": "Non-Spender",
+        "action_probabilities_per_day": {
+          "daily_login": 1.0,
+          "play_level": 4.0,
+          "buy_common_item": 0.2,
+          "buy_premium_item": 0.0,
+          "buy_gems_iap": 0.0,
+          "watch_rewarded_ad": 1.5
+        },
+         "redemption_buffer_factor": 1.2
+      },
+      "spender": {
+         "name": "Spender",
+         "action_probabilities_per_day": {
+           "daily_login": 1.0,
+           "play_level": 6.0,
+           "buy_common_item": 0.3,
+           "buy_premium_item": 0.1,
+           "buy_gems_iap": 0.05,
+           "watch_rewarded_ad": 0.5
+         },
+          "redemption_buffer_factor": 1.05
+      }
+    }
+}
+  
